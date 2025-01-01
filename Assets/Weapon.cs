@@ -16,7 +16,6 @@ private void  Update()
 {
  Attack();
  ChangeWeapon();   
- //IdleAnim();
 }
 
 
@@ -58,12 +57,12 @@ private void Attack()
         if(_isKnife)
         {
          animator.SetTrigger("AttackKnife");
-         StartCoroutine(StopAnimationAttack(2.67f));
+         StartCoroutine(StopAnimationAttack(2.68f));
         }
         if(_isSword)
         {
          animator.SetTrigger("AttackSword");
-         StartCoroutine(StopAnimationAttack(1.55f));
+         StartCoroutine(StopAnimationAttack(1.52f));
         }
     }
 }
