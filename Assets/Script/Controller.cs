@@ -10,7 +10,7 @@ public class Controller : MonoBehaviour
    private CharacterController _char=null;
    private Weapon _animator;
 
-   private bool isMove, isJump;
+   private bool isMove, isJump, isJumping;
    private float _currentSpeed;
 
    private float _vert,_horiz;
@@ -25,7 +25,7 @@ private void Awake()
 
 private void Update()
    {
-    Walk();
+    //Walk();
     Run();
     KeyJump();
    }
@@ -33,6 +33,7 @@ private void Update()
 private void FixedUpdate()
    {
     Jump();
+    Walk();
    }
 
 private void Walk()
@@ -58,7 +59,8 @@ private void Walk()
     }
 
     transform.Rotate(new Vector3(0.0f, _horiz* _RotSpeed, 0.0f));
-   // _char.SimpleMove(_moveDirect);
+   //_char.SimpleMove(_moveDirect);
+    _char.Move(_moveDirect*Time.fixedDeltaTime);
     }
 
 private void Jump()
@@ -68,38 +70,42 @@ _vert = Input.GetAxis("Vertical");
 
 if(_char.isGrounded)
 {
+    _animator.animator.SetBool("isFall",false);
     _moveDirect = new Vector3(_horiz, 0.0f, _vert)*_Speed;
-    if(isJump)
+    if(isJumping)
     {
+        _animator.animator.SetBool("isJump",true);
     _moveDirect.y += _Jump;
-    _animator.animator.SetBool("isFlip",isJump);
-    //isJump= false;
-    }
-    else
-    {
-        //_animator.animator.SetBool("isFlip",false);
-    }
-} 
+
+    } 
+}
 else
     {
         _moveDirect.y -=_Gravity * Time.fixedDeltaTime;
-        if(_moveDirect.y<0)
+        if(_moveDirect.y<0.2f)
         {
-            //_animator.animator.SetBool("Fall",true);
+            _animator.animator.SetBool("isJump",false);
+           _animator.animator.SetBool("isFall",true);
+          // Invoke("Fall",1.5f);
         }
+        
     }
-    _char.Move(_moveDirect*Time.fixedDeltaTime);
+   _char.Move(_moveDirect*Time.fixedDeltaTime);
 }
 
 private void KeyJump()
 {
-    if(Input.GetKey(KeyCode.Space)&& _char.isGrounded)
+    if(Input.GetKey(KeyCode.Space)&& isJump)
     {
-        isJump=true;
+        // _animator.animator.SetBool("isJump",true);
+        isJump=false;  
+        isJumping=true; 
     }
-    else if(Input.GetKeyUp(KeyCode.Space)&&!_char.isGrounded)
+    else if(Input.GetKeyUp(KeyCode.Space)&& !isJump)
     {
-        isJump=false;
+        //  _animator.animator.SetBool("isJump",false);
+        isJump=true;
+        isJumping=false;
     }
 }
 
@@ -116,8 +122,11 @@ private void Run()
        _currentSpeed = _Speed;
        _animator.animator.SetBool("Run", false);
     }
-
 }
 
+private void Fall()
+{
+    _animator.animator.SetBool("isFall",false);
+}
 
 }

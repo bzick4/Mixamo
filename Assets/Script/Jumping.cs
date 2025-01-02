@@ -26,11 +26,11 @@ private void Update()
             }
             if(other.CompareTag("Jump1"))
             {
-              
+              isJump1=true;
             }
             if(other.CompareTag("Jump2"))
             {
-              
+               isJump2=true;
             }
             if(other.CompareTag("Jump3"))
             {
@@ -42,17 +42,18 @@ private void Update()
         {
             if(other.CompareTag("Jump0"))
             {
-              isJump0 = false;
-             
-              _animator.animator.ResetTrigger("Jump0");
+              isJump0=false;
+              _animator.animator.SetBool("isJump0",false);
             }
             if(other.CompareTag("Jump1"))
             {
-              
+              isJump1=false;
+              _animator.animator.SetBool("isJump1",false);
             }
             if(other.CompareTag("Jump2"))
             {
-              
+              isJump2=false;
+              _animator.animator.SetBool("isJump2",false);
             }
             if(other.CompareTag("Jump3"))
             {
@@ -65,12 +66,17 @@ private void Update()
 
 private void PressJump()
 {
-    if(Input.GetKeyDown(KeyCode.Space))
+    if(Input.GetKeyDown(KeyCode.F)&& isJump0)
     {
-      if(isJump0)
-      {
-        _animator.animator.SetTrigger("Jump0");
-      }
+        _animator.animator.SetBool("isJump0",true);
+    }
+    if(Input.GetKeyDown(KeyCode.F)&& isJump1)
+    {
+        _animator.animator.SetBool("isJump1",true);
+    }
+    if(Input.GetKeyDown(KeyCode.F)&& isJump2)
+    {
+        _animator.animator.SetBool("isJump2",true);
     }
 }
 
