@@ -1,53 +1,48 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Weapon : MonoBehaviour
 {
-    [SerializeField] private GameObject _Knife, _Sword;
-
     public Animator animator {get; set;}
-
+    private ChangeWeapon _changeWeapon;
     private bool _isKnife, _isSword;
 
-
+private int yyy;
+   
 
 private void  Update() 
 {
  Attack();
- ChangeWeapon();   
+  Change();
 }
-
-
 
 private void Awake()
     {
         animator = GetComponent<Animator>();
+        _changeWeapon = GetComponent<ChangeWeapon>();
     }
-
-
-private void ChangeWeapon()
-{
-    if(Input.GetKeyDown(KeyCode.Alpha1))
-    {
-      _Knife.SetActive(false);
-      _Sword.SetActive(true);
-      _isSword=true;
-      _isKnife=false;
-    }
-    
-    if(Input.GetKeyDown(KeyCode.Alpha2))
-   {
-      _Knife.SetActive(true);
-      _Sword.SetActive(false);
-      _isSword=false;
-      _isKnife=true;
-   }
-}
 
 public void IdleAnim()
     {
         animator.SetBool("isIdle",true);
+    }
+
+    private void Change()
+    {
+        if(Input.GetKeyDown(KeyCode.Mouse0))
+        {
+           switch (yyy)
+           {
+            case 0: 
+                _isKnife=true;
+                break;
+            case 1:
+                _isSword=true;
+                break;
+            default:
+                break;
+           }
+        }
     }
 
 private void Attack()

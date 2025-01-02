@@ -58,7 +58,7 @@ private void Walk()
     }
 
     transform.Rotate(new Vector3(0.0f, _horiz* _RotSpeed, 0.0f));
-    _char.SimpleMove(_moveDirect);
+   // _char.SimpleMove(_moveDirect);
     }
 
 private void Jump()
@@ -72,12 +72,12 @@ if(_char.isGrounded)
     if(isJump)
     {
     _moveDirect.y += _Jump;
-    _animator.animator.SetTrigger("Jump 0");
+    _animator.animator.SetBool("isFlip",isJump);
+    //isJump= false;
     }
     else
     {
-        //_animator.animator.SetBool("Fall",false);
-        //_animator.animator.SetBool("Jump",false);
+        //_animator.animator.SetBool("isFlip",false);
     }
 } 
 else
