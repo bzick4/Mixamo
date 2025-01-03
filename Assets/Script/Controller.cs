@@ -10,7 +10,8 @@ public class Controller : MonoBehaviour
    private CharacterController _char=null;
    private Weapon _animator;
 
-   private bool isMove, isJump, isJumping;
+   public bool isMove{get;set;}
+   private bool isJump, isJumping;
    private float _currentSpeed;
 
    private float _vert,_horiz;
