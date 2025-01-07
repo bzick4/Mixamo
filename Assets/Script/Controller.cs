@@ -5,11 +5,9 @@ using UnityEngine;
 public class Controller : MonoBehaviour
 {
    [SerializeField] float _Speed,_RunSpeed, _RotSpeed;
-   [SerializeField] float _Jump, _Gravity;
+   [SerializeField] float _Jump, _ForwardForce;
    private Vector3 _moveDirect;
-   private CharacterController _char=null;
    private Weapon _animator;
-
    private Rigidbody _hero;
 
    private bool isJump, isJumping, isMove;
@@ -20,97 +18,45 @@ public class Controller : MonoBehaviour
 
 private void Awake()
    {
-    _char= GetComponent<CharacterController>();
     _animator =GetComponent <Weapon>();
     _hero = GetComponent<Rigidbody>();
     _currentSpeed = _Speed;
+    isMove = true;
    }
 
 private void Update()
    {
-    //Walk();
-    Run();
-    KeyJump();
+     _vert = Input.GetAxis("Vertical");
+     _horiz = Input.GetAxis("Horizontal"); 
+     Run();
+     KeyJump();
    }
 
 private void FixedUpdate()
    {
-    Jump();
-    Walk();
+    if(isMove)
+     {
+      Walk();
+     }
+     if(isMove && isJumping)
+     {
+        Jump();
+     }
    }
 
 private void Walk()
    {
-     _vert = Input.GetAxis("Vertical");
-     _horiz = Input.GetAxis("Horizontal"); 
-
-     if(_vert!=0)
+    _moveDirect = new Vector3(_horiz, 0, _vert).normalized;
+    transform.Translate(_moveDirect * _currentSpeed * Time.fixedDeltaTime);
+    if(_vert != 0)
     {
-        isMove = true;
-        _moveDirect = transform.forward*_currentSpeed*_vert;
         _animator.animator.SetFloat("Velocity", Mathf.Abs(_vert));
     }
-    else if(_vert<0.0f)
+    if(_horiz != 0)
     {
-        isMove = !isMove;
-        
-        _moveDirect=-transform.forward *_currentSpeed;
+        transform.Rotate(0, _horiz * _RotSpeed * Time.fixedDeltaTime ,0);
     }
-    else
-    {
-        _moveDirect = Vector3.zero;
-    }
-
-    transform.Rotate(new Vector3(0.0f, _horiz* _RotSpeed, 0.0f));
-   //_char.SimpleMove(_moveDirect);
-    _char.Move(_moveDirect*Time.fixedDeltaTime);
-    }
-
-private void Jump()
-{
-// _horiz = Input.GetAxis("Horizontal"); 
-// _vert = Input.GetAxis("Vertical");
-
-if(!_char.isGrounded && !isJumping)
-{
-
-
-//     _animator.animator.SetBool("isFall",false);
-    _moveDirect = new Vector3(_horiz, 0.0f, _vert)*_Speed;
-    
-//    if(isJumping)
-//     {
-//         isMove = false; 
-//         _animator.animator.SetBool("isJump",true);
-//         _moveDirect.y += _Jump; 
-//     }
-//    else
-//     {
-     _moveDirect.y -=_Gravity * Time.fixedDeltaTime;
-//      if(_moveDirect.y<0.2f)
-//       {
-//         _animator.animator.SetBool("isJump",false);
-//         _animator.animator.SetBool("isFall",true);
-//           // Invoke("Fall",1.5f);
-//       } 
-//     }
-   _char.Move(_moveDirect*Time.fixedDeltaTime);
-}
-}
-
-private void KeyJump()
-{
-    if(Input.GetKeyDown(KeyCode.Space))
-    {
-        isJump=false;  
-        isJumping=true; 
-    }
-    else if(Input.GetKeyUp(KeyCode.Space))
-    {
-        isJump=true;
-        isJumping=false;
-    }
-}
+   }
 
 private void Run()
 {
@@ -124,6 +70,33 @@ private void Run()
     {
        _currentSpeed = _Speed;
        _animator.animator.SetBool("Run", false);
+    }
+}
+
+private void Jump()
+{
+    isMove = false;
+    _hero.velocity = new Vector3(0, _Jump, _ForwardForce);
+    Invoke(nameof(EndJump),5f);
+}
+
+private void EndJump()
+{
+    isMove = true;
+}
+
+private void KeyJump()
+{
+    if(Input.GetKeyDown(KeyCode.Space))
+    {
+        isJump=false;
+        isJumping= true;
+        _moveDirect.y = 0f;
+    }
+    if(Input.GetKeyUp(KeyCode.Space))
+    {
+        isJump =true;
+        isJumping =false;
     }
 }
 

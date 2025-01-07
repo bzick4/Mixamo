@@ -1,4 +1,4 @@
-using Unity.VisualScripting;
+
 using UnityEngine;
 
 public class Jumping : MonoBehaviour
@@ -11,9 +11,7 @@ private int _jump=-1;
 private void Awake()
 {
     _animator = GetComponentInChildren<Weapon>();
-    _controller = GetComponent<CharacterController>();
 }
-
 
 private void Update()
 {
@@ -41,9 +39,7 @@ private void OnTriggerEnter(Collider other)
 
  private void OnTriggerExit(Collider other)
   {
-    if(other.CompareTag("Jump0") || 
-       other.CompareTag("Jump2") ||
-       other.CompareTag("Jump3"))
+    if(other.CompareTag("Jump0") || other.CompareTag("Jump2") || other.CompareTag("Jump3"))
       {
         _jump = -1;        
       }
@@ -58,11 +54,9 @@ private void PressJump()
   {
     case 0 :
         _animator.animator.SetTrigger("Jump0");
-        _controller.Move(new Vector3(0,1,0));
     break;
     case 1 :
         _animator.animator.SetTrigger("Jump1");
-        _controller.Move(new Vector3(0,1,0));
     break;
     case 2 :
          _animator.animator.SetTrigger("Jump2");
@@ -72,7 +66,7 @@ private void PressJump()
     break;
 
     default:
-         _controller.Move(new Vector3(0,0,0));
+         //_controller.Move(new Vector3(0,0,0));
     break;
   }
 }
