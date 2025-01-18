@@ -12,11 +12,6 @@ public class jump : MonoBehaviour
     public float gravity = -9.8f; // Сила притяжения
     public float moveSpeed = 5f; // Скорость движения
 
-    void Start()
-    {
-        _controller = GetComponent<CharacterController>();
-    }
-
     void Update()
     {
         // Проверяем, касается ли персонаж земли
