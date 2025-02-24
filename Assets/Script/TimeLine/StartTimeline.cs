@@ -3,16 +3,28 @@ using UnityEngine;
 
 public class StartTimeline : MonoBehaviour
 {
-    private PlayableDirector _timeLine;
+    [SerializeField] private PlayableDirector _timeLine;
     void Start()
     {
-        _timeLine = GetComponent<PlayableDirector>();
+        //_timeLine = GetComponent<PlayableDirector>();
     }
 
     
-    void Update()
+
+private void OnTriggerEnter(Collider other)
+{
+    if(other.CompareTag("Hero"))
     {
-        if(Input.GetKeyDown(KeyCode.Space))
+        PressButton();
+        Debug.Log("555");
+    }
+
+}
+
+
+    void PressButton()
+    {
+        if(Input.GetKeyDown(KeyCode.E))
         {
             _timeLine.Play();
         }

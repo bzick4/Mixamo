@@ -48,6 +48,7 @@ public class Controller : MonoBehaviour
 
         _chlen.velocity = _moveDirect;
         _animator.animator.SetFloat("Velocity", Mathf.Abs(_vert));
+        Debug.Log();
     }
 
     private void Jump()
