@@ -15,18 +15,9 @@ private void OnTriggerEnter(Collider other)
 {
     if(other.CompareTag("Hero"))
     {
-        PressButton();
-        Debug.Log("555");
+        _timeLine.Play();
     }
 
 }
 
-
-    void PressButton()
-    {
-        if(Input.GetKeyDown(KeyCode.E))
-        {
-            _timeLine.Play();
-        }
-    }
 }

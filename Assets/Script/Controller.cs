@@ -5,7 +5,7 @@ public class Controller : MonoBehaviour
     [SerializeField] float _Speed, _RunSpeed, _RotSpeed;
     [SerializeField] float _Jump, _Gravity, forwardForce;
     private Vector3 _moveDirect;
-    private Rigidbody _chlen = null;
+    private Rigidbody _hero = null;
     private Weapon _animator;
 
     private bool isJump, isJumping, isMove;
@@ -16,8 +16,8 @@ public class Controller : MonoBehaviour
 
     private void Awake()
     {
-        _chlen = GetComponent<Rigidbody>();
-        _animator = GetComponent<Weapon>();
+        _hero = GetComponent<Rigidbody>();
+        _animator = GetComponentInChildren<Weapon>();
         _currentSpeed = _Speed;
         isMove = true;
     }
@@ -27,15 +27,18 @@ public class Controller : MonoBehaviour
         _vert = Input.GetAxis("Vertical");
         _horiz = Input.GetAxis("Horizontal");
         KeyJump();
-    }
-
-    private void FixedUpdate()
-    {
 
         if (isMove)
         {
             Walk();
         }
+    }
+
+
+    private void FixedUpdate()
+    {
+
+        
         if (isMove && isJumping)
         {
             Jump();
@@ -44,17 +47,32 @@ public class Controller : MonoBehaviour
 
     private void Walk()
     {
-        _moveDirect = new Vector3(_horiz * _currentSpeed * Time.fixedDeltaTime, _chlen.velocity.y, _vert * _currentSpeed * Time.fixedDeltaTime);
+    Vector3 inputDirection = new Vector3(_horiz, 0f, _vert);
+    inputDirection.Normalize();
+   
+    Vector3 moveDirection = transform.TransformDirection(inputDirection);
 
-        _chlen.velocity = _moveDirect;
-        _animator.animator.SetFloat("Velocity", Mathf.Abs(_vert));
-        Debug.Log();
+    Vector3 targetVelocity = moveDirection * _currentSpeed;
+    
+    targetVelocity.y = _hero.velocity.y;
+
+    Vector3 velocityChange = targetVelocity - _hero.velocity;
+
+    _hero.AddForce(velocityChange, ForceMode.VelocityChange);
+
+    _animator.animator.SetFloat("Velocity", _hero.velocity.magnitude);
+
+        // _moveDirect = new Vector3(_horiz * _currentSpeed, _hero.velocity.y, _vert * _currentSpeed);
+
+        // //_hero.velocity = _moveDirect;
+        // _animator.animator.SetFloat("Velocity", Mathf.Abs(_vert));
+
     }
 
     private void Jump()
     {
         isMove = false;
-        _chlen.velocity = new Vector3(0f, _Jump, forwardForce);
+        _hero.velocity = new Vector3(0f, _Jump, forwardForce);
         Invoke(nameof(EndJump), 5f);
     }
 
