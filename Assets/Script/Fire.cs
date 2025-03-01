@@ -1,11 +1,18 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Fire : MonoBehaviour
 {
     [SerializeField] private GameObject _Hero, _FireBall;
     [SerializeField] private ParticleSystem _Fire, _Cirlce;
+
+    private Weapon _animation;
+
+
+    private void Awake()
+    {
+        _animation = GetComponentInChildren<Weapon>();
+    }
 
 
     private void Update()
@@ -17,9 +24,8 @@ public class Fire : MonoBehaviour
 
             if(_Hero.activeSelf)
             {
+                _animation.animator.SetTrigger("Transform");
                StartCoroutine("TransformToFire",2f);
-               
-
             }
             else if(_FireBall.activeSelf)
             {
